@@ -1,24 +1,6 @@
-# README
+# RSpec exercise
 
-This README would normally document whatever steps are necessary to get the
-application up and running.
+建立一個 Course 的虛擬教室
 
-Things you may want to cover:
-
-* Ruby version
-
-* System dependencies
-
-* Configuration
-
-* Database creation
-
-* Database initialization
-
-* How to run the test suite
-
-* Services (job queues, cache servers, search engines, etc.)
-
-* Deployment instructions
-
-* ...
+* 使用者可以建立、管理 Course
+* 使用者可以加入 Course
