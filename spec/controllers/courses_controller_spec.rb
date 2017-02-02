@@ -50,4 +50,30 @@ RSpec.describe CoursesController, type: :controller do
       expect(response).to render_template(:new)
     end
   end
+
+  describe "Post create" do
+    it "doesn't create a record when course without a title" do
+      expect do
+        post :create, params: { course: { description: "bar" } }
+      end.to change { Course.count }.by(0)
+    end
+
+    it "render new template when course without a title " do
+      post :create, params: { course: { description: "bar" } }
+      expect(response).to render_template(:new)
+    end
+
+    it "create a new course record when course has a title" do
+      expect do
+        post :create, params: { course: attributes_for(:course) }
+      end.to change { Course.count }.by(1)
+    end
+
+    it "redirect to courses_path when course has a title" do
+      course = build(:course)
+      post :create, params: { course: attributes_for(:course) }
+      expect(response).to redirect_to(courses_path)
+    end
+
+  end
 end
