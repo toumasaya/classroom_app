@@ -1,0 +1,29 @@
+<div class="col-md-12">
+  <div class="course">
+    <%= link_to '新課程', new_course_path, class: "btn pull-right" %>
+  </div>
+
+  <table class="table">
+    <thead>
+      <tr>
+        <th>#</th>
+        <th> Title </th>
+        <th> Description </th>
+        <th></th>
+      </tr>
+    </thead>
+    <tbody>
+      <% @courses.each do |course| %>
+      <tr>
+        <td>#</td>
+        <td><%= link_to course.title, @course %></td>
+        <td><%= course.description %></td>
+        <td>
+          <%= link_to '編輯', edit_course_path(course), class: "btn btn-xs" %>
+          <%= link_to '刪除', course_path(course), class: "btn btn-xs", method: :delete, data: { confirm: "確定要刪除嗎？" } %>
+        </td>
+      </tr>
+      <% end %>
+    </tbody>
+  </table>
+</div>
