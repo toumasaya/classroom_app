@@ -15,6 +15,9 @@ gem 'coffee-rails', '~> 4.2'
 gem 'jquery-rails'
 gem 'turbolinks', '~> 5'
 gem 'jbuilder', '~> 2.5'
+gem 'bootstrap-sass', '~> 3.3.7'
+gem 'devise', '~> 4.2'
+gem 'simple_form', '~> 3.4'
 
 group :development, :test do
   gem 'byebug', platform: :mri
@@ -22,6 +25,7 @@ group :development, :test do
   gem 'rails-controller-testing', '~> 1.0.1'
   gem 'factory_girl_rails', '~> 4.8'
   gem 'shoulda-matchers', '~> 3.1'
+  gem 'capybara', '~> 2.12'
 end
 
 group :development do
