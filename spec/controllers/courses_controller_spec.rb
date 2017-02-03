@@ -1,57 +1,48 @@
 require 'rails_helper'
 
 RSpec.describe CoursesController, type: :controller do
-  describe "GET index" do
-    it "assigns @courses" do
-      course1 = create(:course)
-      course2 = create(:course)
 
-      get :index
+  describe "GET index" do
+    let(:course1) { create(:course) }
+    let(:course2) { create(:course) }
+    before { get :index }
+
+    it "assigns @courses" do
       expect(assigns[:courses]).to eq([course1, course2])
     end
 
     it "render template" do
-      course1 = create(:course)
-      course2 = create(:course)
-
-      get :index
       expect(response).to render_template(:index)
     end
   end
 
   describe "GET show" do
-    it "assigns @course" do
-      course = create(:course)
+    let(:course) { create(:course) }
+    before { get :show, params: { id: course.id } }
 
-      get :show, params: { id: course.id }
+    it "assigns @course" do
       expect(assigns[:course]).to eq(course)
     end
 
     it "render template" do
-      course = create(:course)
-
-      get :show, params: { id: course.id }
       expect(response).to render_template(:show)
     end
   end
 
   describe "GET new" do
     context "When user login" do
-      it "assign @course" do
-        user = create(:user)
-        course = build(:course)
-
+      let(:user) { create(:user) }
+      let(:course) { build(:course) }
+      before do
         sign_in user
         get :new
+      end
+
+      it "assign @course" do
         expect(assigns(:course)).to be_a_new(Course)
       end
 
       it "render template" do
-        user = create(:user)
-        course = build(:course)
-
-        sign_in user
-        get :new
         expect(response).to render_template(:new)
       end
     end
@@ -96,51 +87,46 @@ RSpec.describe CoursesController, type: :controller do
   end
 
   describe "GET edit" do
+    let(:course) { create(:course) }
+    before { get :edit, params: { id: course.id } }
+
     it "assign course" do
-      course = create(:course)
-      get :edit, params: { id: course.id }
       expect(assigns[:course]).to eq(course)
     end
 
     it "render template" do
-      course = create(:course)
-      get :edit, params: { id: course.id }
       expect(response).to render_template(:edit)
     end
   end
 
   describe "PUT update" do
+    let(:course) { create(:course) }
+
     context "When course doesn't have a title" do
+      before { put :update, params: { id: course.id, course: { title: "", description: "description" } } }
+
       it "doesn't update a record" do
-        course = create(:course)
-        put :update, params: { id: course.id, course: { title: "", description: "description" } }
         expect(course.description).not_to eq("description")
       end
 
       it "render edit template" do
-        course = create(:course)
-        put :update, params: { id: course.id, course: { title: "", description: "description" } }
         expect(response).to render_template(:edit)
       end
     end
 
     context "When course has a title" do
+      before { put :update, params: { id: course.id, course: { title: "Title", description: "description" } } }
+
       it "assign @course" do
-        course = create(:course)
-        put :update, params: { id: course.id, course: { title: "title", description: "description" } }
         expect(assigns[:course]).to eq(course)
       end
 
       it "change value" do
-        course = create(:course)
-        put :update, params: { id: course.id, course: { title: "Title", description: "description" } }
         expect(assigns[:course].title).to eq("Title")
         expect(assigns[:course].description).to eq("description")
       end
 
       it "redirect to course_path" do
-        course = create(:course)
-        put :update, params: { id: course.id, course: { title: "Title", description: "description" } }
         expect(response).to redirect_to(course_path(course))
       end
     end
