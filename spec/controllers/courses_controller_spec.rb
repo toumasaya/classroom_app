@@ -1,7 +1,7 @@
 require 'rails_helper'
 
 RSpec.describe CoursesController, type: :controller do
-  describe "Get index" do
+  describe "GET index" do
     it "assigns @courses" do
       course1 = create(:course)
       course2 = create(:course)
@@ -19,7 +19,7 @@ RSpec.describe CoursesController, type: :controller do
     end
   end
 
-  describe "Get show" do
+  describe "GET show" do
     it "assigns @course" do
       course = create(:course)
 
@@ -35,7 +35,7 @@ RSpec.describe CoursesController, type: :controller do
     end
   end
 
-  describe "Get new" do
+  describe "GET new" do
     it "assign @course" do
       course = build(:course)
 
@@ -51,7 +51,7 @@ RSpec.describe CoursesController, type: :controller do
     end
   end
 
-  describe "Post create" do
+  describe "POST create" do
     context "When course doesn't have a title" do
       it "doesn't create a record" do
         expect do
@@ -80,7 +80,7 @@ RSpec.describe CoursesController, type: :controller do
     end
   end
 
-  describe "Get edit" do
+  describe "GET edit" do
     it "assign course" do
       course = create(:course)
       get :edit, params: { id: course.id }
@@ -91,6 +91,43 @@ RSpec.describe CoursesController, type: :controller do
       course = create(:course)
       get :edit, params: { id: course.id }
       expect(response).to render_template(:edit)
+    end
+  end
+
+  describe "PUT update" do
+    context "When course doesn't have a title" do
+      it "doesn't update a record" do
+        course = create(:course)
+        put :update, params: { id: course.id, course: { title: "", description: "description" } }
+        expect(course.description).not_to eq("description")
+      end
+
+      it "render edit template" do
+        course = create(:course)
+        put :update, params: { id: course.id, course: { title: "", description: "description" } }
+        expect(response).to render_template(:edit)
+      end
+    end
+
+    context "When course has a title" do
+      it "assign @course" do
+        course = create(:course)
+        put :update, params: { id: course.id, course: { title: "title", description: "description" } }
+        expect(assigns[:course]).to eq(course)
+      end
+
+      it "change value" do
+        course = create(:course)
+        put :update, params: { id: course.id, course: { title: "Title", description: "description" } }
+        expect(assigns[:course].title).to eq("Title")
+        expect(assigns[:course].description).to eq("description")
+      end
+
+      it "redirect to course_path" do
+        course = create(:course)
+        put :update, params: { id: course.id, course: { title: "Title", description: "description" } }
+        expect(response).to redirect_to(course_path(course))
+      end
     end
   end
 end
