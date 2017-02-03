@@ -22,3 +22,10 @@
 * rails-controller-testing
 * factory_girl_rails
 * shoulda-matchers
+* capybara
+
+## 開發工具
+
+* bootstrap-sass
+* simple_form
+* devise
