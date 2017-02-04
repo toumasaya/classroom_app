@@ -16,6 +16,16 @@
 7. 可以刪除 course 資料 - `courses#destroy`
 8. 把首頁設為 `courses#index`
 
+## Feature 測試
+
+使用 capybara 寫 Feature spec
+
+## 結合 devise 做測試
+
+1. 使用者必須登入才能 new/create/edit/update/destroy course
+  * 使用者 create course 必須跟 user 做關聯
+2. 只有原始作者才能 create/edit/update/destroy course
+
 ## 測試工具
 
 * rspec-rails
