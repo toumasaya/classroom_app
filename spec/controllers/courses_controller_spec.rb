@@ -101,7 +101,7 @@ RSpec.describe CoursesController, type: :controller do
     # let(:course) { create(:course) }
     # before { get :edit, params: { id: course.id } }
 
-    context "signed in as author" do
+    context "When signed in as author" do
       before { sign_in author }
 
       it "assign course" do
@@ -118,7 +118,7 @@ RSpec.describe CoursesController, type: :controller do
 
     end
 
-    context "signed in not as author" do
+    context "When signed in not as author" do
       before { sign_in not_author }
 
       it "raises an error" do
@@ -135,7 +135,7 @@ RSpec.describe CoursesController, type: :controller do
     let(:not_author) { create(:user) }
     # let(:course) { create(:course) }
 
-    context "signed in as author" do
+    context "When signed in as author" do
       before { sign_in author }
 
       context "When course has a title" do
@@ -175,7 +175,7 @@ RSpec.describe CoursesController, type: :controller do
 
     end
 
-    context "signed in not as author" do
+    context "When signed in not as author" do
       before { sign_in not_author }
 
       it "raise an error" do
@@ -186,27 +186,43 @@ RSpec.describe CoursesController, type: :controller do
       end
     end
 
-
-
-
   end
 
   describe "DELETE destroy" do
-    it "assign @course" do
-      course = create(:course)
-      delete :destroy, params: { id: course.id }
-      expect(assigns[:course]).to eq(course)
+    let(:author) { create(:user) }
+    let(:not_author) { create(:user) }
+
+    context "When signed in as author" do
+      before { sign_in author }
+
+      it "assign @course" do
+        course = create(:course, user: author)
+        delete :destroy, params: { id: course.id }
+        expect(assigns[:course]).to eq(course)
+      end
+
+      it "delete a record" do
+        course = create(:course, user: author)
+        expect { delete :destroy, params: { id: course.id } }.to change { Course.count }.by(-1)
+      end
+
+      it "redirect to courses_path" do
+        course = create(:course, user: author)
+        delete :destroy, params: { id: course.id }
+        expect(response).to redirect_to courses_path
+      end
     end
 
-    it "delete a record" do
-      course = create(:course)
-      expect { delete :destroy, params: { id: course.id } }.to change { Course.count }.by(-1)
-    end
+    context "When signed in not as author" do
+      before { sign_in not_author }
 
-    it "redirect to courses_path" do
-      course = create(:course)
-      delete :destroy, params: { id: course.id }
-      expect(response).to redirect_to courses_path
+      it "raises an error" do
+        course = create(:course, user: author)
+        expect do
+          delete :destroy, params: { id: course.id }
+        end.to raise_error ActiveRecord::RecordNotFound
+
+      end
     end
   end
 end
